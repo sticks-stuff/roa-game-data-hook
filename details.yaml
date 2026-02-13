@@ -1,0 +1,6 @@
+name: roa-game-data-hook
+# mod loader version that this mod supports
+loader-version: 0.0.3
+description: Outputs current game data as json over a TCP socket
+repository: https://github.com/sticks-stuff/roa-game-data-hook
+branch: main

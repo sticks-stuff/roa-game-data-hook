@@ -1,0 +1,39 @@
+{
+  "state": "menu",
+  "is_results_screen": false,
+  "stage": -1,
+  "players": [
+    {
+      "name": "GAY",
+      "stocks": 0,
+      "damage": 0,
+      "char_id": 2,
+      "alt": 9,
+      "active": true
+    },
+    {
+      "name": "P2",
+      "stocks": 0,
+      "damage": 0,
+      "char_id": -1,
+      "alt": 0,
+      "active": false
+    },
+    {
+      "name": "P3",
+      "stocks": 0,
+      "damage": 0,
+      "char_id": -1,
+      "alt": 0,
+      "active": false
+    },
+    {
+      "name": "P4",
+      "stocks": 0,
+      "damage": 0,
+      "char_id": -1,
+      "alt": 0,
+      "active": false
+    }
+  ]
+}

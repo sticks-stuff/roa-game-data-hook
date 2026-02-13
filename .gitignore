@@ -1,0 +1,10 @@
+/bin
+/out
+/.github
+/.git
+/.vs
+/.vscode
+/CMakeFiles
+/build
+
+CMakeCache.txt

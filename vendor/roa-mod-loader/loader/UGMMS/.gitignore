@@ -1,0 +1,12 @@
+/bin
+/out
+/.github
+/.git
+/.vs
+/.vscode
+/CMakeFiles
+
+*.user
+
+CMakeCache.txt
+

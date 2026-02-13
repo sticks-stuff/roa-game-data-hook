@@ -1,0 +1,3 @@
+[submodule "vendor/roa-mod-loader"]
+	path = vendor/roa-mod-loader
+	url = https://github.com/raicool/roa-mod-loader
