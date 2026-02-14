@@ -85,6 +85,39 @@ static void __declspec(naked) char_select_detour() // credit to Rai for this (ht
 	}
 }
 
+static void (*replay_set_char_orig)() = nullptr;
+static void __declspec(naked) replay_set_char_detour()
+{
+	__asm
+	{
+		sub esp, 4
+		push eax
+		push ebx
+		sub esp, 16
+		movdqu xmmword ptr[esp], xmm0
+
+		mov eax, [esi - 0x4] // port id
+		dec eax
+		shl eax, 4
+		lea ebx, characters
+		add ebx, eax
+
+		movdqu xmm0, xmmword ptr[esi]
+		movsd [ebx] GMLVar.valueReal, xmm0
+		mov eax, [esi + 0xc]
+		mov [ebx] GMLVar.type, eax
+
+
+	replay_set_char_detour:
+		movdqu xmm0, xmmword ptr[esp]
+		add esp, 16
+		pop ebx
+		pop eax
+		add esp, 4
+		jmp replay_set_char_orig
+	}
+}
+
 enum class NetState
 {
 	menu,
@@ -907,6 +940,29 @@ DWORD WINAPI entry(LPVOID module)
 		else
 		{
 			loader_log_warn("[game-data-hook] char_select pattern not found; char_id will stay -1");
+		}
+
+		// @ 0x0323cd90
+		pattern =
+		{
+			0x50, // push eax
+			0xe8, '?', '?', '?', '?', // call func_00401870
+			0x8b, 0x46, 0x24, // mov eax, [esi + 0x24]
+			0xc7, 0x46, 0x4c, 0xf1, 0x00, 0x00, 0x00, // mov [esi + 0x4c], 0xf1
+			0x48, // dec eax
+			0xa9, 0xfc, 0xff, 0xff, 0x00, // test data_0x00fffffc
+			0x75, 0x0c // jnz 0x0323cdb8
+		};
+
+		uint32_t replay_select = (uint32_t)loader_search_memory(pattern);
+		if (replay_select)
+		{
+			loader_hook_create(reinterpret_cast<void*>(replay_select), &replay_set_char_detour, reinterpret_cast<void**>(&replay_set_char_orig));
+			loader_hook_enable(reinterpret_cast<void*>(replay_select));
+		}
+		else
+		{
+			loader_log_warn("[game-data-hook] replay_set_char pattern not found; char_id will not update upon replay load");
 		}
 	}
 	if (!g_orig_set_player_profile)
